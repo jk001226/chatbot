@@ -46,16 +46,14 @@ else:
         refined_prompt = generate_prompt(prompt)
         try:
             # OpenAI API 호출 및 응답 생성
-            response = openai.ChatCompletion.create(
+            response = openai.Completion.create(
                 model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": "You are a helpful travel assistant."},
-                    {"role": "user", "content": refined_prompt}
-                ]
+                prompt=refined_prompt,
+                max_tokens=150
             )
 
             # Assistant 응답 저장 및 표시
-            assistant_reply = response.choices[0].message["content"]
+            assistant_reply = response.choices[0].text.strip()
             with st.chat_message("assistant"):
                 st.markdown(assistant_reply)
             st.session_state.messages.append({"role": "assistant", "content": assistant_reply})
